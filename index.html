@@ -20,8 +20,6 @@
     --muted:   #7a8499;
     --text:    #1e2535;
     --row-alt: #f9fafb;
-    --warn-bg: #fffbeb;
-    --warn-border: #fcd34d;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -72,11 +70,57 @@
   td { font-size: 0.78rem; padding: 7px 12px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); white-space: nowrap; }
   tr:last-child td { border-bottom: none; }
   tr:nth-child(even) td { background: var(--row-alt); }
-  tr.skip-row td { background: var(--warn-bg); }
 
-  .skip-section { margin-top: 16px; border: 1px solid var(--warn-border); border-left: 4px solid #f59e0b; border-radius: 5px; overflow: hidden; display: none; }
+  .skip-section {
+    margin-top: 28px;
+    border: 1px solid #7f1d1d;
+    border-radius: 6px;
+    overflow: hidden;
+    display: none;
+    background: #1a0a0a;
+  }
   .skip-section.visible { display: block; }
-  .skip-header { background: var(--warn-bg); padding: 10px 14px; font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #92400e; border-bottom: 1px solid var(--warn-border); }
+  .skip-header {
+    background: #7f1d1d;
+    padding: 12px 16px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #fecaca;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .skip-header::before {
+    content: '⚠';
+    font-size: 1rem;
+  }
+  .skip-section table { background: #1a0a0a; }
+  .skip-section th {
+    background: #450a0a;
+    color: #fca5a5;
+    border-right-color: rgba(255,255,255,0.06);
+  }
+  .skip-section td {
+    color: #fecaca;
+    border-bottom-color: #2d1010;
+    border-right-color: #2d1010;
+    font-family: 'Courier New', monospace;
+    font-size: 0.74rem;
+  }
+  .skip-section tr:nth-child(even) td { background: #200d0d; }
+  .skip-section tr:hover td { background: #2d1010; }
+  .skip-reason td:last-child { color: #f87171; font-style: italic; }
+  .skip-more {
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    color: #f87171;
+    border-top: 1px solid #2d1010;
+    font-family: 'Lato', sans-serif;
+    background: #150808;
+  }
 </style>
 </head>
 <body>
@@ -103,13 +147,6 @@
     </div>
     <div class="log" id="log-to-acu"></div>
 
-    <div class="skip-section" id="skip-to-acu">
-      <div class="skip-header" id="skip-header-to-acu"></div>
-      <div class="tbl-wrap">
-        <table><thead id="skip-head-to-acu"></thead><tbody id="skip-body-to-acu"></tbody></table>
-      </div>
-    </div>
-
     <div class="preview-wrap" id="preview-to-acu">
       <div class="preview-label">Output preview — first 10 rows</div>
       <div class="tbl-wrap">
@@ -119,6 +156,13 @@
     <div class="actions" id="act-to-acu">
       <button class="btn btn-primary" onclick="downloadOutput('to-acu')">↓ Download Upload File</button>
       <button class="btn btn-ghost" onclick="resetMode('to-acu')">Reset</button>
+    </div>
+
+    <div class="skip-section" id="skip-to-acu">
+      <div class="skip-header" id="skip-header-to-acu"></div>
+      <div class="tbl-wrap">
+        <table><thead id="skip-head-to-acu"></thead><tbody id="skip-body-to-acu"></tbody></table>
+      </div>
     </div>
   </div>
 
@@ -133,13 +177,6 @@
     </div>
     <div class="log" id="log-from-acu"></div>
 
-    <div class="skip-section" id="skip-from-acu">
-      <div class="skip-header" id="skip-header-from-acu"></div>
-      <div class="tbl-wrap">
-        <table><thead id="skip-head-from-acu"></thead><tbody id="skip-body-from-acu"></tbody></table>
-      </div>
-    </div>
-
     <div class="preview-wrap" id="preview-from-acu">
       <div class="preview-label">Output preview — first 10 rows</div>
       <div class="tbl-wrap">
@@ -149,6 +186,13 @@
     <div class="actions" id="act-from-acu">
       <button class="btn btn-primary" onclick="downloadOutput('from-acu')">↓ Download Review File</button>
       <button class="btn btn-ghost" onclick="resetMode('from-acu')">Reset</button>
+    </div>
+
+    <div class="skip-section" id="skip-from-acu">
+      <div class="skip-header" id="skip-header-from-acu"></div>
+      <div class="tbl-wrap">
+        <table><thead id="skip-head-from-acu"></thead><tbody id="skip-body-from-acu"></tbody></table>
+      </div>
     </div>
   </div>
 </div>
@@ -294,13 +338,17 @@ function processToAcu(wb,filename) {
 
     const uom=g(row,cols.uomIdx);
     let itemBreaks=0;
-    const missingQtys=[], missingPrices=[];
+    const priceWithoutQty=[]; // actionable: has price but no qty entered
 
     for (let b=0;b<pairCount;b++) {
       const qty  =row[cols.qtyCols[b]];
       const price=row[cols.breakPriceCols[b]];
-      if (qty==null||qty==='') { if (price!=null&&price!=='') missingQtys.push(b+1); continue; }
-      if (price==null||price==='') { missingPrices.push(b+1); continue; }
+      if (qty==null||qty==='') {
+        // Only flag if there IS a price — means someone set a price but forgot the qty
+        if (price!=null&&price!=='') priceWithoutQty.push(b+1);
+        continue; // qty-without-price is structural (extra qty col), not an error
+      }
+      if (price==null||price==='') continue; // qty exists but no price col — structural, skip silently
       outRows.push([
         g(row,cols.fieldMap.priceType),g(row,cols.fieldMap.priceCode),g(row,cols.fieldMap.altId),
         invId,g(row,cols.fieldMap.desc),uom,g(row,cols.fieldMap.warehouse),
@@ -311,16 +359,13 @@ function processToAcu(wb,filename) {
     }
 
     if (itemBreaks===0) {
-      const reason = missingQtys.length ? 'Has price(s) but no QTY for break(s): '+missingQtys.join(',')
-                   : missingPrices.length ? 'Has QTY but no price for break(s): '+missingPrices.join(',')
-                   : 'No break data';
+      const reason = priceWithoutQty.length
+        ? 'Has price(s) but no QTY for break(s): '+priceWithoutQty.join(', ')
+        : 'No valid break data (prices or qty missing for all breaks)';
       skipRows.push([...row.slice(0,skipHeaders.length-1).map(c=>c??''), reason]);
     } else {
-      // Partial skips - some breaks had mismatched data but item still produced rows
-      if (missingQtys.length)
-        skipRows.push([...row.slice(0,skipHeaders.length-1).map(c=>c??''), 'Partial: missing QTY for break(s) '+missingQtys.join(',')]);
-      if (missingPrices.length)
-        skipRows.push([...row.slice(0,skipHeaders.length-1).map(c=>c??''), 'Partial: missing price for break(s) '+missingPrices.join(',')]);
+      if (priceWithoutQty.length)
+        skipRows.push([...row.slice(0,skipHeaders.length-1).map(c=>c??''), 'Partial: has price but no QTY for break(s): '+priceWithoutQty.join(', ')]);
       items++;
     }
   }
@@ -446,30 +491,34 @@ function processFromAcu(wb,filename) {
 
 // ── Render skip table ──────────────────────────────────────────────────────
 function renderSkips(mode,headers,rows) {
-  const sec=document.getElementById('skip-'+mode);
-  const hdr=document.getElementById('skip-header-'+mode);
-  const thead=document.getElementById('skip-head-'+mode);
-  const tbody=document.getElementById('skip-body-'+mode);
+  const sec   = document.getElementById('skip-'+mode);
+  const hdr   = document.getElementById('skip-header-'+mode);
+  const thead = document.getElementById('skip-head-'+mode);
+  const tbody = document.getElementById('skip-body-'+mode);
 
-  hdr.textContent=rows.length+' Row'+(rows.length!==1?'s':'')+' With Issues — Review Before Uploading';
+  hdr.textContent = rows.length+' Item'+(rows.length!==1?'s':'')+' With Data Issues — Fix Before Uploading';
   thead.innerHTML=''; tbody.innerHTML='';
+
+  // Remove old more-div if present
+  const old = sec.querySelector('.skip-more');
+  if (old) old.remove();
 
   const tr=document.createElement('tr');
   headers.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
   thead.appendChild(tr);
 
-  rows.slice(0,50).forEach(row=>{
-    const tr=document.createElement('tr');
+  const display = rows.slice(0,10);
+  display.forEach(row=>{
+    const tr=document.createElement('tr'); tr.className='skip-reason';
     row.forEach(cell=>{ const td=document.createElement('td'); td.textContent=cell??''; tr.appendChild(td); });
     tbody.appendChild(tr);
   });
 
-  if (rows.length>50) {
-    const tr=document.createElement('tr');
-    const td=document.createElement('td');
-    td.colSpan=headers.length; td.style.textAlign='center'; td.style.color='var(--muted)'; td.style.padding='10px';
-    td.textContent='... and '+(rows.length-50)+' more — download file to see all';
-    tr.appendChild(td); tbody.appendChild(tr);
+  if (rows.length>10) {
+    const more=document.createElement('div');
+    more.className='skip-more';
+    more.textContent='⚠ Showing 10 of '+rows.length+' issues. Download the file to see all on the "Issues" sheet.';
+    sec.appendChild(more);
   }
 
   sec.classList.add('visible');

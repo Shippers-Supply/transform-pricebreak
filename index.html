@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Break Transformer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Oswald:wght@500;600&display=swap');
+
+  :root {
+    --navy:    #1b2a4a;
+    --navy-dk: #111d33;
+    --navy-lt: #233560;
+    --orange:  #e8601c;
+    --orange-h:#f0742e;
+    --white:   #ffffff;
+    --offwhite:#f4f5f7;
+    --border:  #dde1e8;
+    --muted:   #7a8499;
+    --text:    #1e2535;
+    --row-alt: #f9fafb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--offwhite);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    background: var(--navy-dk);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    border-bottom: 3px solid var(--orange);
+  }
+
+  .topbar-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .topbar-sub {
+    margin-left: 16px;
+    padding-left: 16px;
+    border-left: 1px solid rgba(255,255,255,0.2);
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+  }
+
+  .page { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  .tab {
+    padding: 10px 22px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+  }
+
+  .tab:hover { color: var(--navy); }
+  .tab.active { color: var(--navy); border-bottom-color: var(--orange); }
+
+  .tab .badge {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #e8eefd;
+    color: #3a5bba;
+    margin-left: 8px;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .dropzone {
+    background: var(--white);
+    border: 2px dashed var(--border);
+    border-radius: 6px;
+    padding: 52px 32px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s;
+  }
+
+  .dropzone:hover, .dropzone.drag-over {
+    border-color: var(--orange);
+    background: #fff8f4;
+  }
+
+  .dropzone input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .dz-icon {
+    width: 48px; height: 48px;
+    margin: 0 auto 14px;
+    background: var(--offwhite);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .dropzone h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .dropzone p { font-size: 0.78rem; color: var(--muted); }
+
+  .log {
+    margin-top: 16px;
+    background: var(--navy-dk);
+    border-radius: 5px;
+    padding: 14px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.76rem;
+    line-height: 1.8;
+    display: none;
+    color: #c8d0e0;
+  }
+  .log.visible { display: block; }
+  .log .ok   { color: #6ee7a0; }
+  .log .warn { color: #fbbf24; }
+  .log .err  { color: #f87171; }
+
+  .actions {
+    margin-top: 18px;
+    display: none;
+    gap: 10px;
+    align-items: center;
+  }
+  .actions.visible { display: flex; }
+
+  .btn {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-primary { background: var(--orange); color: var(--white); }
+  .btn-primary:hover { background: var(--orange-h); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: #aab; }
+
+  .preview-wrap {
+    margin-top: 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: none;
+  }
+  .preview-wrap.visible { display: block; }
+
+  .preview-label {
+    background: var(--navy);
+    color: rgba(255,255,255,0.7);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+  }
+
+  .tbl-wrap { overflow-x: auto; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--white); }
+
+  th {
+    background: var(--navy-lt);
+    color: rgba(255,255,255,0.85);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    text-align: left;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+
+  td {
+    font-size: 0.78rem;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--row-alt); }
+
+  .stub-notice {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--orange);
+    border-radius: 5px;
+    padding: 24px 28px;
+  }
+
+  .stub-notice h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+
+  .stub-notice p { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+
+  .stub-notice code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    background: var(--offwhite);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--navy);
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">Price Break Transformer</span>
+  <span class="topbar-sub">Acumatica Pricing Utility</span>
+</div>
+
+<div class="page">
+
+  <div class="tabs">
+    <button class="tab active" onclick="setMode('to-acu')">Review → Acumatica Upload</button>
+    <button class="tab" onclick="setMode('from-acu')">
+      Acumatica Export → Review Format
+      <span class="badge">Pending</span>
+    </button>
+  </div>
+
+  <!-- Panel A -->
+  <div class="panel active" id="panel-to-acu">
+    <div class="dropzone" id="dz-to-acu"
+         ondragover="dzDrag(event,'dz-to-acu')"
+         ondragleave="dzLeave('dz-to-acu')"
+         ondrop="dzDrop(event,'to-acu')">
+      <input type="file" accept=".xlsx,.xlsm,.xls" onchange="fileChosen(event,'to-acu')">
+      <div class="dz-icon">📂</div>
+      <h3>Drop file here or click to browse</h3>
+      <p>Expects "New Price Breaks" or "Market Changes Break Master" sheet &nbsp;·&nbsp; .xlsx / .xlsm</p>
+    </div>
+    <div class="log" id="log-to-acu"></div>
+    <div class="preview-wrap" id="preview-to-acu">
+      <div class="preview-label">Output preview — first 10 rows</div>
+      <div class="tbl-wrap">
+        <table><thead id="ph-to-acu"></thead><tbody id="pb-to-acu"></tbody></table>
+      </div>
+    </div>
+    <div class="actions" id="act-to-acu">
+      <button class="btn btn-primary" onclick="downloadOutput('to-acu')">↓ Download Upload File</button>
+      <button class="btn btn-ghost" onclick="resetMode('to-acu')">Reset</button>
+    </div>
+  </div>
+
+  <!-- Panel B -->
+  <div class="panel" id="panel-from-acu">
+    <div class="stub-notice">
+      <h3>Not Yet Available</h3>
+      <p>
+        This direction requires a sample Acumatica price export to confirm the exact column layout.
+        Expected input: a flat file with columns <code>Price Type</code>, <code>Inventory ID</code>,
+        <code>UOM</code>, <code>Break Qty</code>, <code>Pending Price</code> — one row per break per item.
+        Once a sample export is provided, this will pivot those rows back into the side-by-side
+        break column format used for pricing review.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Column map (0-based) — confirmed against Fall 2022 sample data
+const C = {
+  PRICE_TYPE:  0,   // A
+  PRICE_CODE:  1,   // B
+  ALT_ID:      2,   // C
+  INV_ID:      3,   // D
+  DESC:        4,   // E
+  UOM_F:       5,   // F  (often blank; fall back to BASE_UNIT)
+  WAREHOUSE:   6,   // G
+  REBATE_COST: 9,   // J
+  EFF_DATE:   10,   // K
+  EXP_DATE:   11,   // L
+  PROMOTION:  12,   // M
+  BASE_UNIT:  17,   // R  (UOM fallback)
+  BREAK_START:22,   // W  Break 1..20 prices
+  QTY_START:  42,   // AQ QTY Break 1..20 qtys
+  MAX_BREAKS: 20,
+};
+
+function getUOM(row) {
+  const f = row[C.UOM_F];
+  return (f != null && f !== '') ? f : (row[C.BASE_UNIT] ?? '');
+}
+
+const S = { 'to-acu': { rows: null, filename: null } };
+
+function setMode(mode) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0) === (mode === 'to-acu'));
+  });
+  ['to-acu', 'from-acu'].forEach(m =>
+    document.getElementById('panel-' + m).classList.toggle('active', m === mode)
+  );
+}
+
+function dzDrag(e, id) { e.preventDefault(); document.getElementById(id).classList.add('drag-over'); }
+function dzLeave(id)   { document.getElementById(id).classList.remove('drag-over'); }
+function dzDrop(e, mode) {
+  e.preventDefault(); dzLeave('dz-' + mode);
+  const f = e.dataTransfer.files[0]; if (f) processFile(f, mode);
+}
+function fileChosen(e, mode) { const f = e.target.files[0]; if (f) processFile(f, mode); }
+
+function logMsg(mode, msg, cls = '') {
+  const el = document.getElementById('log-' + mode);
+  el.classList.add('visible');
+  const s = document.createElement('span');
+  if (cls) s.className = cls;
+  s.textContent = msg;
+  el.appendChild(s);
+  el.appendChild(document.createElement('br'));
+}
+function clearLog(mode) {
+  const el = document.getElementById('log-' + mode);
+  el.innerHTML = ''; el.classList.remove('visible');
+}
+
+function processFile(file, mode) {
+  clearLog(mode);
+  document.getElementById('preview-' + mode).classList.remove('visible');
+  document.getElementById('act-' + mode).classList.remove('visible');
+  S[mode].rows = null;
+  logMsg(mode, 'Reading: ' + file.name);
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true, raw: false });
+      if (mode === 'to-acu') processToAcu(wb, file.name);
+    } catch(err) { logMsg(mode, 'Error: ' + err.message, 'err'); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function processToAcu(wb, filename) {
+  const mode = 'to-acu';
+  const KNOWN = ['new price breaks','market changes break master','break master','market changes'];
+  let sheetName = wb.SheetNames.find(n => KNOWN.some(k => n.toLowerCase().includes(k)));
+  if (!sheetName) sheetName = wb.SheetNames[0];
+  logMsg(mode, 'Sheet: "' + sheetName + '"');
+
+  const raw = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header:1, defval:null, raw:false });
+  if (raw.length < 2) { logMsg(mode, 'No data rows found.', 'err'); return; }
+
+  const headers = raw[0];
+  const hAt = i => (headers[i] || '').toString().trim().toLowerCase();
+
+  if (!hAt(C.INV_ID).includes('inventory'))
+    logMsg(mode, 'Warning: col D = "' + headers[C.INV_ID] + '" — expected "Inventory ID". Check file format.', 'warn');
+  if (!hAt(C.BREAK_START).toLowerCase().includes('break'))
+    logMsg(mode, 'Warning: col W = "' + headers[C.BREAK_START] + '" — expected "Break 1". Column map may be off.', 'warn');
+
+  const OUT = ['Price Type','Price Code','Alternate ID','Inventory ID','Description',
+               'UOM','Warehouse','Break Qty','Pending Price','Rebate Cost',
+               'Effective Date','Expiration Date','Promotion'];
+
+  const outRows = [OUT];
+  let items = 0, breaks = 0, skipped = 0;
+
+  for (let r = 1; r < raw.length; r++) {
+    const row = raw[r];
+    if (!row || row.every(c => c === null || c === '')) continue;
+    const invId = row[C.INV_ID];
+    if (invId === null || invId === '') { skipped++; continue; }
+
+    const uom = getUOM(row);
+    let itemBreaks = 0;
+
+    for (let b = 0; b < C.MAX_BREAKS; b++) {
+      const qty   = row[C.QTY_START   + b];
+      const price = row[C.BREAK_START + b];
+      if (qty == null || qty === '' || price == null || price === '') continue;
+      outRows.push([
+        row[C.PRICE_TYPE]  ?? '',
+        row[C.PRICE_CODE]  ?? '',
+        row[C.ALT_ID]      ?? '',
+        invId,
+        row[C.DESC]        ?? '',
+        uom,
+        row[C.WAREHOUSE]   ?? '',
+        qty,
+        price,
+        row[C.REBATE_COST] ?? '',
+        row[C.EFF_DATE]    ?? '',
+        row[C.EXP_DATE]    ?? '',
+        row[C.PROMOTION]   ?? '',
+      ]);
+      itemBreaks++; breaks++;
+    }
+
+    if (itemBreaks > 0) items++;
+    else skipped++;
+  }
+
+  if (items === 0) {
+    logMsg(mode, 'No valid rows found. Verify the file uses the expected Break Master format.', 'err');
+    return;
+  }
+
+  logMsg(mode, '✓ ' + items + ' items · ' + breaks + ' upload rows generated', 'ok');
+  if (skipped > 0) logMsg(mode, skipped + ' rows skipped (no Inventory ID or no break data)', 'warn');
+
+  S[mode].rows = outRows;
+  S[mode].filename = filename.replace(/\.[^.]+$/, '') + '_ACU_UPLOAD.xlsx';
+  renderPreview(mode, outRows);
+  document.getElementById('act-' + mode).classList.add('visible');
+}
+
+function renderPreview(mode, rows) {
+  const thead = document.getElementById('ph-' + mode);
+  const tbody = document.getElementById('pb-' + mode);
+  thead.innerHTML = ''; tbody.innerHTML = '';
+  const tr = document.createElement('tr');
+  rows[0].forEach(h => { const th = document.createElement('th'); th.textContent = h; tr.appendChild(th); });
+  thead.appendChild(tr);
+  rows.slice(1, 11).forEach(row => {
+    const tr = document.createElement('tr');
+    row.forEach(cell => { const td = document.createElement('td'); td.textContent = cell ?? ''; tr.appendChild(td); });
+    tbody.appendChild(tr);
+  });
+  document.getElementById('preview-' + mode).classList.add('visible');
+}
+
+function downloadOutput(mode) {
+  const { rows, filename } = S[mode];
+  if (!rows) return;
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sales Price WS Template');
+  XLSX.writeFile(wb, filename);
+}
+
+function resetMode(mode) {
+  clearLog(mode);
+  document.getElementById('preview-' + mode).classList.remove('visible');
+  document.getElementById('act-' + mode).classList.remove('visible');
+  S[mode].rows = null;
+  document.getElementById('dz-' + mode).querySelector('input').value = '';
+}
+</script>
+</body>
+</html>

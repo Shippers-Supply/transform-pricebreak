@@ -262,7 +262,7 @@
 <script>
 const S = { 'to-acu': { rows: null, filename: null } };
 
-// Known sheet names to prefer, in order
+// Known sheet names to prefer, in order (used as tiebreaker only)
 const PREFERRED_SHEETS = [
   'new price breaks', 'all items - base prices',
   'market changes break master', 'break master', 'market changes'
@@ -325,9 +325,25 @@ function processFile(file, mode) {
 }
 
 // ── Detect sheet ───────────────────────────────────────────────────────────
+// Prefer known names; if none match, scan all sheets and pick the first one
+// that has both a "Break N" price column and a "QTY Break N" column.
 function pickSheet(wb) {
-  return wb.SheetNames.find(n => PREFERRED_SHEETS.some(k => n.toLowerCase().includes(k)))
-      || wb.SheetNames[0];
+  const byName = wb.SheetNames.find(n =>
+    PREFERRED_SHEETS.some(k => n.toLowerCase().includes(k)));
+  if (byName) return byName;
+
+  for (const name of wb.SheetNames) {
+    const raw = XLSX.utils.sheet_to_json(wb.Sheets[name], {header:1, defval:null, raw:false});
+    if (!raw.length) continue;
+    // Check first 5 rows for a header row with Break columns
+    for (let i = 0; i < Math.min(5, raw.length); i++) {
+      const hl = raw[i].map(h => (h||'').toString().trim().toLowerCase());
+      const hasBreak = hl.some(h => /^break \d+$/.test(h));
+      const hasQty   = hl.some(h => /^qty break \d+$/.test(h));
+      if (hasBreak && hasQty) return name;
+    }
+  }
+  return wb.SheetNames[0];
 }
 
 // ── Dynamic column detection ───────────────────────────────────────────────

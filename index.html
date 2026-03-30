@@ -40,7 +40,6 @@
     height: 56px;
     border-bottom: 3px solid var(--orange);
   }
-
   .topbar-title {
     font-family: 'Oswald', sans-serif;
     font-size: 1.05rem;
@@ -49,7 +48,6 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-
   .topbar-sub {
     margin-left: 16px;
     padding-left: 16px;
@@ -59,14 +57,13 @@
     font-weight: 300;
   }
 
-  .page { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+  .page { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
 
   .tabs {
     display: flex;
     border-bottom: 2px solid var(--border);
     margin-bottom: 28px;
   }
-
   .tab {
     padding: 10px 22px;
     font-family: 'Oswald', sans-serif;
@@ -82,10 +79,8 @@
     margin-bottom: -2px;
     transition: all 0.15s;
   }
-
   .tab:hover { color: var(--navy); }
   .tab.active { color: var(--navy); border-bottom-color: var(--orange); }
-
   .tab .badge {
     font-family: 'Lato', sans-serif;
     font-size: 0.62rem;
@@ -96,7 +91,6 @@
     color: #3a5bba;
     margin-left: 8px;
     vertical-align: middle;
-    letter-spacing: 0.04em;
   }
 
   .panel { display: none; }
@@ -112,40 +106,25 @@
     position: relative;
     transition: all 0.15s;
   }
-
   .dropzone:hover, .dropzone.drag-over {
     border-color: var(--orange);
     background: #fff8f4;
   }
-
   .dropzone input[type=file] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
   }
-
   .dz-icon {
-    width: 48px; height: 48px;
-    margin: 0 auto 14px;
-    background: var(--offwhite);
-    border-radius: 50%;
+    width: 48px; height: 48px; margin: 0 auto 14px;
+    background: var(--offwhite); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.4rem;
   }
-
   .dropzone h3 {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--navy);
-    margin-bottom: 6px;
+    font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--navy); margin-bottom: 6px;
   }
-
   .dropzone p { font-size: 0.78rem; color: var(--muted); }
 
   .log {
@@ -164,114 +143,64 @@
   .log .warn { color: #fbbf24; }
   .log .err  { color: #f87171; }
 
-  .actions {
-    margin-top: 18px;
-    display: none;
-    gap: 10px;
-    align-items: center;
-  }
+  .actions { margin-top: 18px; display: none; gap: 10px; align-items: center; }
   .actions.visible { display: flex; }
 
   .btn {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 10px 24px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.15s;
+    font-family: 'Oswald', sans-serif; font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 10px 24px; border: none; border-radius: 4px;
+    cursor: pointer; transition: all 0.15s;
   }
-
   .btn-primary { background: var(--orange); color: var(--white); }
   .btn-primary:hover { background: var(--orange-h); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-  }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
   .btn-ghost:hover { color: var(--text); border-color: #aab; }
 
   .preview-wrap {
-    margin-top: 20px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    display: none;
+    margin-top: 20px; border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden; display: none;
   }
   .preview-wrap.visible { display: block; }
-
   .preview-label {
-    background: var(--navy);
-    color: rgba(255,255,255,0.7);
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    background: var(--navy); color: rgba(255,255,255,0.7);
+    font-family: 'Oswald', sans-serif; font-size: 0.72rem;
+    font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
     padding: 8px 14px;
   }
-
   .tbl-wrap { overflow-x: auto; }
-
   table { width: 100%; border-collapse: collapse; background: var(--white); }
-
   th {
-    background: var(--navy-lt);
-    color: rgba(255,255,255,0.85);
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 8px 12px;
-    text-align: left;
-    white-space: nowrap;
+    background: var(--navy-lt); color: rgba(255,255,255,0.85);
+    font-family: 'Oswald', sans-serif; font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 8px 12px; text-align: left; white-space: nowrap;
     border-right: 1px solid rgba(255,255,255,0.08);
   }
-
   td {
-    font-size: 0.78rem;
-    padding: 7px 12px;
+    font-size: 0.78rem; padding: 7px 12px;
     border-bottom: 1px solid var(--border);
     border-right: 1px solid var(--border);
     white-space: nowrap;
   }
-
   tr:last-child td { border-bottom: none; }
   tr:nth-child(even) td { background: var(--row-alt); }
 
   .stub-notice {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--orange);
-    border-radius: 5px;
+    background: var(--white); border: 1px solid var(--border);
+    border-left: 4px solid var(--orange); border-radius: 5px;
     padding: 24px 28px;
   }
-
   .stub-notice h3 {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--navy);
-    margin-bottom: 10px;
+    font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--navy); margin-bottom: 10px;
   }
-
   .stub-notice p { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
-
   .stub-notice code {
-    font-family: 'Courier New', monospace;
-    font-size: 0.78rem;
-    background: var(--offwhite);
-    padding: 1px 5px;
-    border-radius: 3px;
-    color: var(--navy);
-    border: 1px solid var(--border);
+    font-family: 'Courier New', monospace; font-size: 0.78rem;
+    background: var(--offwhite); padding: 1px 5px; border-radius: 3px;
+    color: var(--navy); border: 1px solid var(--border);
   }
 </style>
 </head>
@@ -292,7 +221,6 @@
     </button>
   </div>
 
-  <!-- Panel A -->
   <div class="panel active" id="panel-to-acu">
     <div class="dropzone" id="dz-to-acu"
          ondragover="dzDrag(event,'dz-to-acu')"
@@ -301,7 +229,7 @@
       <input type="file" accept=".xlsx,.xlsm,.xls" onchange="fileChosen(event,'to-acu')">
       <div class="dz-icon">📂</div>
       <h3>Drop file here or click to browse</h3>
-      <p>Expects "New Price Breaks" or "Market Changes Break Master" sheet &nbsp;·&nbsp; .xlsx / .xlsm</p>
+      <p>Accepts any review sheet with "Break 1" and "QTY Break 1" columns &nbsp;·&nbsp; .xlsx / .xlsm</p>
     </div>
     <div class="log" id="log-to-acu"></div>
     <div class="preview-wrap" id="preview-to-acu">
@@ -316,7 +244,6 @@
     </div>
   </div>
 
-  <!-- Panel B -->
   <div class="panel" id="panel-from-acu">
     <div class="stub-notice">
       <h3>Not Yet Available</h3>
@@ -333,51 +260,41 @@
 </div>
 
 <script>
-// Column map (0-based) — confirmed against Fall 2022 sample data
-const C = {
-  PRICE_TYPE:  0,   // A
-  PRICE_CODE:  1,   // B
-  ALT_ID:      2,   // C
-  INV_ID:      3,   // D
-  DESC:        4,   // E
-  UOM_F:       5,   // F  (often blank; fall back to BASE_UNIT)
-  WAREHOUSE:   6,   // G
-  REBATE_COST: 9,   // J
-  EFF_DATE:   10,   // K
-  EXP_DATE:   11,   // L
-  PROMOTION:  12,   // M
-  BASE_UNIT:  17,   // R  (UOM fallback)
-  BREAK_START:22,   // W  Break 1..20 prices
-  QTY_START:  42,   // AQ QTY Break 1..20 qtys
-  MAX_BREAKS: 20,
-};
-
-function getUOM(row) {
-  const f = row[C.UOM_F];
-  return (f != null && f !== '') ? f : (row[C.BASE_UNIT] ?? '');
-}
-
 const S = { 'to-acu': { rows: null, filename: null } };
 
+// Known sheet names to prefer, in order
+const PREFERRED_SHEETS = [
+  'new price breaks', 'all items - base prices',
+  'market changes break master', 'break master', 'market changes'
+];
+
+// Output columns for Acumatica Sales Price WS Template
+const OUT_HEADERS = [
+  'Price Type','Price Code','Alternate ID','Inventory ID','Description',
+  'UOM','Warehouse','Break Qty','Pending Price','Rebate Cost',
+  'Effective Date','Expiration Date','Promotion'
+];
+
+// ── Mode ───────────────────────────────────────────────────────────────────
 function setMode(mode) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', (i === 0) === (mode === 'to-acu'));
-  });
-  ['to-acu', 'from-acu'].forEach(m =>
-    document.getElementById('panel-' + m).classList.toggle('active', m === mode)
-  );
+  document.querySelectorAll('.tab').forEach((t,i) =>
+    t.classList.toggle('active', (i===0) === (mode==='to-acu')));
+  ['to-acu','from-acu'].forEach(m =>
+    document.getElementById('panel-'+m).classList.toggle('active', m===mode));
 }
 
-function dzDrag(e, id) { e.preventDefault(); document.getElementById(id).classList.add('drag-over'); }
-function dzLeave(id)   { document.getElementById(id).classList.remove('drag-over'); }
-function dzDrop(e, mode) {
-  e.preventDefault(); dzLeave('dz-' + mode);
-  const f = e.dataTransfer.files[0]; if (f) processFile(f, mode);
+// ── Drag/drop ──────────────────────────────────────────────────────────────
+function dzDrag(e,id) { e.preventDefault(); document.getElementById(id).classList.add('drag-over'); }
+function dzLeave(id)  { document.getElementById(id).classList.remove('drag-over'); }
+function dzDrop(e,mode) {
+  e.preventDefault(); dzLeave('dz-'+mode);
+  const f = e.dataTransfer.files[0]; if (f) processFile(f,mode);
 }
-function fileChosen(e, mode) { const f = e.target.files[0]; if (f) processFile(f, mode); }
+function fileChosen(e,mode) { const f=e.target.files[0]; if(f) processFile(f,mode); }
 
-function logMsg(mode, msg, cls = '') {
-  const el = document.getElementById('log-' + mode);
+// ── Logging ────────────────────────────────────────────────────────────────
+function logMsg(mode, msg, cls='') {
+  const el = document.getElementById('log-'+mode);
   el.classList.add('visible');
   const s = document.createElement('span');
   if (cls) s.className = cls;
@@ -386,78 +303,155 @@ function logMsg(mode, msg, cls = '') {
   el.appendChild(document.createElement('br'));
 }
 function clearLog(mode) {
-  const el = document.getElementById('log-' + mode);
+  const el = document.getElementById('log-'+mode);
   el.innerHTML = ''; el.classList.remove('visible');
 }
 
+// ── Process ────────────────────────────────────────────────────────────────
 function processFile(file, mode) {
   clearLog(mode);
-  document.getElementById('preview-' + mode).classList.remove('visible');
-  document.getElementById('act-' + mode).classList.remove('visible');
+  document.getElementById('preview-'+mode).classList.remove('visible');
+  document.getElementById('act-'+mode).classList.remove('visible');
   S[mode].rows = null;
-  logMsg(mode, 'Reading: ' + file.name);
+  logMsg(mode, 'Reading: '+file.name);
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true, raw: false });
-      if (mode === 'to-acu') processToAcu(wb, file.name);
-    } catch(err) { logMsg(mode, 'Error: ' + err.message, 'err'); }
+      const wb = XLSX.read(e.target.result, {type:'array', cellDates:true, raw:false});
+      if (mode==='to-acu') processToAcu(wb, file.name);
+    } catch(err) { logMsg(mode, 'Error: '+err.message, 'err'); }
   };
   reader.readAsArrayBuffer(file);
 }
 
+// ── Detect sheet ───────────────────────────────────────────────────────────
+function pickSheet(wb) {
+  return wb.SheetNames.find(n => PREFERRED_SHEETS.some(k => n.toLowerCase().includes(k)))
+      || wb.SheetNames[0];
+}
+
+// ── Dynamic column detection ───────────────────────────────────────────────
+function detectColumns(headers) {
+  const hl = headers.map(h => (h||'').toString().trim().toLowerCase());
+
+  const find = (exact) => hl.indexOf(exact);
+  const findPartial = (part) => hl.findIndex(h => h.includes(part));
+
+  // Required: Inventory ID
+  const invIdx = find('inventory id') !== -1 ? find('inventory id') : findPartial('inventory');
+
+  // UOM: prefer 'uom', fall back to 'base unit'
+  const uomIdx = find('uom') !== -1 ? find('uom') : find('base unit');
+
+  // Optional passthrough fields
+  const fieldMap = {
+    priceType:  find('price type'),
+    priceCode:  find('price code'),
+    altId:      find('alternate id'),
+    desc:       find('description'),
+    warehouse:  find('warehouse'),
+    rebateCost: find('rebate cost'),
+    effDate:    find('effective date'),
+    expDate:    find('expiration date'),
+    promotion:  find('promotion'),
+  };
+
+  // Break price columns: all headers matching /^break \d+$/
+  // Collect in positional order
+  const breakPriceCols = hl
+    .map((h,i) => ({ h, i }))
+    .filter(({h}) => /^break \d+$/.test(h))
+    .sort((a,b) => {
+      const na = parseInt(a.h.replace('break ',''));
+      const nb = parseInt(b.h.replace('break ',''));
+      return na - nb;
+    })
+    .map(x => x.i);
+
+  // QTY break columns: all headers matching /^qty break \d+$/
+  const qtyCols = hl
+    .map((h,i) => ({ h, i }))
+    .filter(({h}) => /^qty break \d+$/.test(h))
+    .sort((a,b) => {
+      const na = parseInt(a.h.replace('qty break ',''));
+      const nb = parseInt(b.h.replace('qty break ',''));
+      return na - nb;
+    })
+    .map(x => x.i);
+
+  return { invIdx, uomIdx, fieldMap, breakPriceCols, qtyCols };
+}
+
+// ── Main transform ─────────────────────────────────────────────────────────
 function processToAcu(wb, filename) {
   const mode = 'to-acu';
-  const KNOWN = ['new price breaks','market changes break master','break master','market changes'];
-  let sheetName = wb.SheetNames.find(n => KNOWN.some(k => n.toLowerCase().includes(k)));
-  if (!sheetName) sheetName = wb.SheetNames[0];
-  logMsg(mode, 'Sheet: "' + sheetName + '"');
+  const sheetName = pickSheet(wb);
+  logMsg(mode, 'Sheet: "'+sheetName+'"');
 
-  const raw = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header:1, defval:null, raw:false });
+  const raw = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {header:1, defval:null, raw:false});
   if (raw.length < 2) { logMsg(mode, 'No data rows found.', 'err'); return; }
 
-  const headers = raw[0];
-  const hAt = i => (headers[i] || '').toString().trim().toLowerCase();
+  // Find header row — scan first 5 rows for one containing 'inventory id'
+  let headerRowIdx = 0;
+  for (let i = 0; i < Math.min(5, raw.length); i++) {
+    if (raw[i].some(c => c && c.toString().toLowerCase().includes('inventory id'))) {
+      headerRowIdx = i; break;
+    }
+  }
 
-  if (!hAt(C.INV_ID).includes('inventory'))
-    logMsg(mode, 'Warning: col D = "' + headers[C.INV_ID] + '" — expected "Inventory ID". Check file format.', 'warn');
-  if (!hAt(C.BREAK_START).toLowerCase().includes('break'))
-    logMsg(mode, 'Warning: col W = "' + headers[C.BREAK_START] + '" — expected "Break 1". Column map may be off.', 'warn');
+  const headers = raw[headerRowIdx];
+  const cols = detectColumns(headers);
 
-  const OUT = ['Price Type','Price Code','Alternate ID','Inventory ID','Description',
-               'UOM','Warehouse','Break Qty','Pending Price','Rebate Cost',
-               'Effective Date','Expiration Date','Promotion'];
+  if (cols.invIdx === -1) {
+    logMsg(mode, 'Could not find "Inventory ID" column. Check file format.', 'err'); return;
+  }
+  if (cols.breakPriceCols.length === 0) {
+    logMsg(mode, 'Could not find any "Break N" price columns. Check file format.', 'err'); return;
+  }
+  if (cols.qtyCols.length === 0) {
+    logMsg(mode, 'Could not find any "QTY Break N" columns. Check file format.', 'err'); return;
+  }
 
-  const outRows = [OUT];
+  logMsg(mode,
+    cols.breakPriceCols.length + ' price break col(s), ' +
+    cols.qtyCols.length + ' qty break col(s) detected'
+  );
+
+  const pairCount = Math.min(cols.breakPriceCols.length, cols.qtyCols.length);
+  const outRows = [OUT_HEADERS];
   let items = 0, breaks = 0, skipped = 0;
 
-  for (let r = 1; r < raw.length; r++) {
-    const row = raw[r];
-    if (!row || row.every(c => c === null || c === '')) continue;
-    const invId = row[C.INV_ID];
-    if (invId === null || invId === '') { skipped++; continue; }
+  const g = (row, idx) => (idx !== -1 && idx < row.length) ? (row[idx] ?? '') : '';
 
-    const uom = getUOM(row);
+  for (let r = headerRowIdx + 1; r < raw.length; r++) {
+    const row = raw[r];
+    if (!row || row.every(c => c===null || c==='')) continue;
+
+    const invId = g(row, cols.invIdx);
+    if (invId === '') { skipped++; continue; }
+
+    const uom = g(row, cols.uomIdx);
     let itemBreaks = 0;
 
-    for (let b = 0; b < C.MAX_BREAKS; b++) {
-      const qty   = row[C.QTY_START   + b];
-      const price = row[C.BREAK_START + b];
-      if (qty == null || qty === '' || price == null || price === '') continue;
+    for (let b = 0; b < pairCount; b++) {
+      const qty   = row[cols.qtyCols[b]];
+      const price = row[cols.breakPriceCols[b]];
+      if (qty==null || qty==='' || price==null || price==='') continue;
+
       outRows.push([
-        row[C.PRICE_TYPE]  ?? '',
-        row[C.PRICE_CODE]  ?? '',
-        row[C.ALT_ID]      ?? '',
+        g(row, cols.fieldMap.priceType),
+        g(row, cols.fieldMap.priceCode),
+        g(row, cols.fieldMap.altId),
         invId,
-        row[C.DESC]        ?? '',
+        g(row, cols.fieldMap.desc),
         uom,
-        row[C.WAREHOUSE]   ?? '',
+        g(row, cols.fieldMap.warehouse),
         qty,
         price,
-        row[C.REBATE_COST] ?? '',
-        row[C.EFF_DATE]    ?? '',
-        row[C.EXP_DATE]    ?? '',
-        row[C.PROMOTION]   ?? '',
+        g(row, cols.fieldMap.rebateCost),
+        g(row, cols.fieldMap.effDate),
+        g(row, cols.fieldMap.expDate),
+        g(row, cols.fieldMap.promotion),
       ]);
       itemBreaks++; breaks++;
     }
@@ -467,49 +461,51 @@ function processToAcu(wb, filename) {
   }
 
   if (items === 0) {
-    logMsg(mode, 'No valid rows found. Verify the file uses the expected Break Master format.', 'err');
+    logMsg(mode, 'No valid rows produced. Verify break price and qty columns contain data.', 'err');
     return;
   }
 
-  logMsg(mode, '✓ ' + items + ' items · ' + breaks + ' upload rows generated', 'ok');
-  if (skipped > 0) logMsg(mode, skipped + ' rows skipped (no Inventory ID or no break data)', 'warn');
+  logMsg(mode, '✓ '+items+' items · '+breaks+' upload rows generated', 'ok');
+  if (skipped > 0) logMsg(mode, skipped+' rows skipped (no Inventory ID or no break data)', 'warn');
 
   S[mode].rows = outRows;
-  S[mode].filename = filename.replace(/\.[^.]+$/, '') + '_ACU_UPLOAD.xlsx';
+  S[mode].filename = filename.replace(/\.[^.]+$/,'')+'_ACU_UPLOAD.xlsx';
   renderPreview(mode, outRows);
-  document.getElementById('act-' + mode).classList.add('visible');
+  document.getElementById('act-'+mode).classList.add('visible');
 }
 
+// ── Preview ────────────────────────────────────────────────────────────────
 function renderPreview(mode, rows) {
-  const thead = document.getElementById('ph-' + mode);
-  const tbody = document.getElementById('pb-' + mode);
-  thead.innerHTML = ''; tbody.innerHTML = '';
+  const thead = document.getElementById('ph-'+mode);
+  const tbody = document.getElementById('pb-'+mode);
+  thead.innerHTML=''; tbody.innerHTML='';
   const tr = document.createElement('tr');
-  rows[0].forEach(h => { const th = document.createElement('th'); th.textContent = h; tr.appendChild(th); });
+  rows[0].forEach(h => { const th=document.createElement('th'); th.textContent=h; tr.appendChild(th); });
   thead.appendChild(tr);
-  rows.slice(1, 11).forEach(row => {
-    const tr = document.createElement('tr');
-    row.forEach(cell => { const td = document.createElement('td'); td.textContent = cell ?? ''; tr.appendChild(td); });
+  rows.slice(1,11).forEach(row => {
+    const tr=document.createElement('tr');
+    row.forEach(cell => { const td=document.createElement('td'); td.textContent=cell??''; tr.appendChild(td); });
     tbody.appendChild(tr);
   });
-  document.getElementById('preview-' + mode).classList.add('visible');
+  document.getElementById('preview-'+mode).classList.add('visible');
 }
 
+// ── Download ───────────────────────────────────────────────────────────────
 function downloadOutput(mode) {
-  const { rows, filename } = S[mode];
-  if (!rows) return;
+  const {rows, filename} = S[mode]; if (!rows) return;
   const ws = XLSX.utils.aoa_to_sheet(rows);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sales Price WS Template');
   XLSX.writeFile(wb, filename);
 }
 
+// ── Reset ──────────────────────────────────────────────────────────────────
 function resetMode(mode) {
   clearLog(mode);
-  document.getElementById('preview-' + mode).classList.remove('visible');
-  document.getElementById('act-' + mode).classList.remove('visible');
+  document.getElementById('preview-'+mode).classList.remove('visible');
+  document.getElementById('act-'+mode).classList.remove('visible');
   S[mode].rows = null;
-  document.getElementById('dz-' + mode).querySelector('input').value = '';
+  document.getElementById('dz-'+mode).querySelector('input').value='';
 }
 </script>
 </body>
